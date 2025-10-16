@@ -1,22 +1,32 @@
-import { useEditor } from '@/components/editor-context'
+import { Editor, rootCtx } from "@milkdown/kit/core"
+import { commonmark } from "@milkdown/kit/preset/commonmark"
+import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react"
+import { nord } from "@milkdown/theme-nord"
+import React from "react"
 
-export default function Editor() {
-  const { textareaRef, content, setContent } = useEditor()
+interface MilkdownEditorProps {
+  className?: string
+}
 
-  const handleInput = (e: React.FormEvent<HTMLDivElement>) => {
-    setContent(e.currentTarget.innerHTML)
-  }
+const MilkdownEditor: React.FC<MilkdownEditorProps> = ({ className }) => {
+  const editor = useEditor((root) =>
+    Editor.make()
+      .config(nord)
+      .config((ctx) => ctx.set(rootCtx, root))
+      .use(commonmark)
+  )
 
+  return <Milkdown className={className?.toString() as string} />
+}
+
+interface MarkdownEditorProps {
+  className?: string
+}
+
+export default function MarkdownEditor({ className }: MarkdownEditorProps) {
   return (
-    <div
-      contentEditable={true}
-      ref={textareaRef}
-      onInput={handleInput}
-      className="outline-0 m-auto mt-5 w-155 h-219 bg-amber-50 text-black overflow-auto text-1xl p-5"
-      suppressContentEditableWarning
-      spellCheck={false}
-      role="textbox"
-      aria-multiline="true"
-    />
+    <MilkdownProvider>
+      <MilkdownEditor className={className} />
+    </MilkdownProvider>
   )
 }

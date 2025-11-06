@@ -1,12 +1,15 @@
 #pragma once
+#ifndef APP_HPP
+#define APP_HPP
+
 #include <windows.h>
-struct ApplicationInfo{
+#include <string>
+#include <algorithm>
+
+struct ApplicationInfo {
     HINSTANCE hInstance;
-    HINSTANCE prevInstance;
-    PSTR commandLine;
     int commandShow;
 };
-
 class Application{
     public:
         Application(int width, int height, const char* title, ApplicationInfo infos);
@@ -21,4 +24,7 @@ class Application{
         int width, height;
         const char* window_title;
         WNDCLASSEXW window_class = {};
+        std::wstring wClassName;
+        std::wstring wWindowTitle;
 };
+#endif
